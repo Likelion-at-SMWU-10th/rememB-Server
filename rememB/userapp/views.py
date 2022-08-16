@@ -13,6 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils import timezone
 from rest_framework import permissions
 from .authenticate import SafeJWTAuthentication
+import datetime
 
 
 class UserAuthTestView(APIView):
@@ -86,6 +87,15 @@ class JWTSigninView(generics.CreateAPIView):
 
     def post(self,request):
         try:
+            date_birth=request.data['birth']
+            print(type(request.data['birth']))
+            if len(date_birth)==4:
+                month=int(date_birth[:2])
+                day=int(date_birth[2:])
+                date_birth=str(datetime.date(1000,month,day))
+                request.data['birth']=date_birth
+                print(date_birth)
+            
             user = User.objects.get_or_create( 
                 email=request.data['email'],
                 provider=request.data['provider'],
