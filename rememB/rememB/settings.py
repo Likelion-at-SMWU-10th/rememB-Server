@@ -55,9 +55,9 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = { 
     # 헤더에 access token을 포함하여 유효한 유저만이 접근이 가능하는 것을 Default로 설정
-    'DEFAULT_PERMISSION_CLASSES': ( 
-       'rest_framework.permissions.IsAuthenticated',
-    ),
+    # 'DEFAULT_PERMISSION_CLASSES': ( 
+    #    'rest_framework.permissions.IsAuthenticated',
+    # ),
     # 권한 설정
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'userapp.authenticate.SafeJWTAuthentication',

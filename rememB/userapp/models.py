@@ -9,7 +9,7 @@ class UserManager(BaseUserManager):
             raise ValueError('The Email must be set')
         if not provider:
             raise ValueError('The Social Auth must be set')
-        
+
         user=self.model(
             email=self.normalize_email(email),
             username=username,
