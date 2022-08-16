@@ -1,8 +1,3 @@
-<<<<<<< Updated upstream
-from django.shortcuts import render
-
-# Create your views here.
-=======
 from .serializers import *
 from .models import Letter, User
 from rest_framework.views import APIView
@@ -69,4 +64,4 @@ class LetterDetail(APIView):
         letter=self.get_object(letterpk)
         letter.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
->>>>>>> Stashed changes
+
