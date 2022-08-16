@@ -43,14 +43,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'mainapp',
+    'partyroomapp',
     'letterapp',
-    #'balanceapp',
+    'balanceapp',
     'userapp',
 
     #restframework
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken',
 ]
 
 REST_FRAMEWORK = { 
