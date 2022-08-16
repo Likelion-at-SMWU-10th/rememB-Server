@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from userapp.models import User
 from letterapp.models import Letter
 from rest_framework.views import APIView
@@ -22,10 +21,4 @@ class UserLetterView(APIView):
             serializer=LetterSumSerializer(user_letters, many=True)
             return Response(serializer.data)
         return Response({"error":"User Perimtion Denied"},status=status.HTTP_400_BAD_REQUEST)
-        
-=======
-from django.shortcuts import render
 
-from userapp.models import User
-
->>>>>>> develop
