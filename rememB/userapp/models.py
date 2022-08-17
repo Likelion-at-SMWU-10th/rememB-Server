@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import datetime
 
 
 class UserManager(BaseUserManager):
@@ -58,6 +59,29 @@ class User(AbstractBaseUser):
             print('이미 있는 아이디입니다.')
         return data
     
+    def getDayBefore(mybirthday):
+        mybirthdayList = mybirthday.split("-")
+        byear = int(mybirthdayList[0])
+        bmonth = int(mybirthdayList[1])
+        bday = int(mybirthdayList[2])
+        
+        nowList = str(datetime.now().date()).split("-")
+        nmonth = int(nowList[1])
+        nday= int(nowList[2])
+
+        if(bmonth<nmonth | ((bmonth==nmonth) & (bday<nday))): #이미 생일이 지난경우
+            dday = datetime(2023, bmonth, bday).date()
+            now = datetime.now().date()
+            print(str(dday-now).split(",")[0].split(" ")[0])
+            return int(str(dday-now).split(",")[0].split(" ")[0])
+        else:
+            dday = datetime(2022, bmonth, bday).date()
+            print(dday)
+            now = datetime.now().date()
+            diff = str(dday-now).split(",")[0].split(" ")[0]
+            print(diff)
+            return int(diff)
+
     @property
     def is_staff(self):
         return self.is_admin

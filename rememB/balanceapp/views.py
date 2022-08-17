@@ -10,29 +10,6 @@ from .models import Answer, Balance, Question
 from .serializers import AnswerSerializer, BAQSerializer, QuestionSerializer, BalanceSerializer
 from userapp.models import User
 
-def getDayBefore(mybirthday):
-    mybirthdayList = mybirthday.split("-")
-    byear = int(mybirthdayList[0])
-    bmonth = int(mybirthdayList[1])
-    bday = int(mybirthdayList[2])
-    
-    nowList = str(datetime.now().date()).split("-")
-    nmonth = int(nowList[1])
-    nday= int(nowList[2])
-
-    if(bmonth<nmonth | ((bmonth==nmonth) & (bday<nday))): #이미 생일이 지난경우
-        dday = datetime(2023, bmonth, bday).date()
-        now = datetime.now().date()
-        print(str(dday-now).split(",")[0].split(" ")[0])
-        return int(str(dday-now).split(",")[0].split(" ")[0])
-    else:
-        dday = datetime(2022, bmonth, bday).date()
-        print(dday)
-        now = datetime.now().date()
-        diff = str(dday-now).split(",")[0].split(" ")[0]
-        print(diff)
-        return int(diff)
-
 
 class QuestionList(APIView):
     def get(self, request): #작성한 모든 질문 보기
@@ -93,7 +70,7 @@ class myBalanceGame(APIView):
     
     def post(self, request, pk): #밸런스게임 질문-답 선택(질문 형식으로)
         user=User.objects.get(id=pk)
-        leftDay=getDayBefore(str(user.birth))
+        leftDay=User.getDayBefore(str(user.birth))
         print(request.data)
         if(leftDay <=7):
             request.data['user'] = user.id
@@ -109,7 +86,7 @@ class myBalanceGame(APIView):
         
     def get(self, request, pk): #밸런스게임 질문-답 선택할수있도록 
         user=User.objects.get(id=pk)
-        leftDay=getDayBefore(str(user.birth))
+        leftDay=User.getDayBefore(str(user.birth))
 
         if(leftDay <= 7): #생일 비교해보고 7일 이내라면
             questions=Question.objects.filter(id__gt=(leftDay-1)) #쿼리셋
