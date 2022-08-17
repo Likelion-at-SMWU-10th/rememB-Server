@@ -14,7 +14,7 @@ class UserLetterView(APIView):
     #userpk의 편지만 조회
     def get(self,request,userpk):
         token_user=str(SafeJWTAuthentication.authenticate(self, request)[0])
-        request_user=str(User.objects.filter(id=userpk).values('email'))
+        request_user=str(User.objects.all())
 
         if token_user in request_user:
             user_letters=Letter.objects.filter(user=userpk)
