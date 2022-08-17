@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from userapp.models import User
 from letterapp.models import Letter
 from rest_framework.views import APIView
@@ -9,23 +8,14 @@ from rest_framework import permissions
 from rest_framework import status
 
 class UserLetterView(APIView):
-    authentication_classes=[SafeJWTAuthentication]
-    permission_classes=[permissions.IsAuthenticated]
+    #authentication_classes=[SafeJWTAuthentication]
+    #permission_classes=[permissions.IsAuthenticated]
 
     #userpk의 편지만 조회
     def get(self,request,userpk):
-        token_user=str(SafeJWTAuthentication.authenticate(self, request)[0])
-        request_user=str(User.objects.filter(id=userpk).values('email'))
+        #token_user=str(SafeJWTAuthentication.authenticate(self, request)[0])
+        #request_user=str(User.objects.all())
 
-        if token_user in request_user:
-            user_letters=Letter.objects.filter(user=userpk)
-            serializer=LetterSumSerializer(user_letters, many=True)
-            return Response(serializer.data)
-        return Response({"error":"User Perimtion Denied"},status=status.HTTP_400_BAD_REQUEST)
-        
-=======
-from django.shortcuts import render
-
-from userapp.models import User
-
->>>>>>> develop
+        user_letters=Letter.objects.filter(user=userpk)
+        serializer=LetterSumSerializer(user_letters, many=True)
+        return Response(serializer.data)
