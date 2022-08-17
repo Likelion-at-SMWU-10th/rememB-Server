@@ -30,8 +30,9 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '*',
     '1.0.0.127.in-addr.arpa',
-    '127.0.0.1'
+    '127.0.0.1',
 ]
 
 # Application definition
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'letterapp',
     'balanceapp',
     'userapp',
+    'corsheaders',
 
     #restframework
     'rest_framework',
@@ -56,9 +58,9 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = { 
     # 헤더에 access token을 포함하여 유효한 유저만이 접근이 가능하는 것을 Default로 설정
-    # 'DEFAULT_PERMISSION_CLASSES': ( 
-    #    'rest_framework.permissions.IsAuthenticated',
-    # ),
+    'DEFAULT_PERMISSION_CLASSES': ( 
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     # 권한 설정
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'userapp.authenticate.SafeJWTAuthentication',
@@ -68,14 +70,14 @@ REST_FRAMEWORK = {
 REST_USE_JWT=TRUE
 
 SIMPLE_JWT={
-    'ACCESS_TOKEN_LIFETIME':datetime.timedelta(minutes=10),
+    'ACCESS_TOKEN_LIFETIME':datetime.timedelta(minutes=50),
     'REFRESH_TOKEN_LIFETIME':datetime.timedelta(days=1),
     'ROTATE_REFRESH_TOKENS':False,
     'TOKEN_USER_CLASS':'userapp.User',
-    #'USER_ID_FIELD':'email',
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', #최상단에 추가해주기
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -155,3 +157,15 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+CORS_ALLOWED_ORIGINS = [
+	# 허용할 Origin 추가
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://43.200.193.74:8000",
+    "http://43.200.193.74:3000",
+    "http://rememb.site:3000",
+    "http://rememb.site:8000",
+]
