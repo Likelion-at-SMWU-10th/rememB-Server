@@ -16,8 +16,5 @@ class LetterDetailSerializer(serializers.ModelSerializer):
 class LetterSumSerializer(serializers.ModelSerializer):
     class Meta:
         model=Letter
-<<<<<<< HEAD
         fields=['id','user','imgfolder_no','img_no','position_x','position_y',]
-=======
-        fields=['id','user','content','created_at']
->>>>>>> develop
+
