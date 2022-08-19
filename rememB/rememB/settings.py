@@ -48,18 +48,19 @@ INSTALLED_APPS = [
     'letterapp',
     'balanceapp',
     'userapp',
-    'corsheaders',
 
     #restframework
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
+
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = { 
     # 헤더에 access token을 포함하여 유효한 유저만이 접근이 가능하는 것을 Default로 설정
     'DEFAULT_PERMISSION_CLASSES': ( 
-        'rest_framework.permissions.IsAuthenticated',
+       'rest_framework.permissions.IsAuthenticated',
     ),
     # 권한 설정
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -74,6 +75,7 @@ SIMPLE_JWT={
     'REFRESH_TOKEN_LIFETIME':datetime.timedelta(days=1),
     'ROTATE_REFRESH_TOKENS':False,
     'TOKEN_USER_CLASS':'userapp.User',
+    #'USER_ID_FIELD':'email',
 }
 
 MIDDLEWARE = [
@@ -169,3 +171,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://rememb.site:3000",
     "http://rememb.site:8000",
 ]
+
+
+CORS_ORIGIN_ALLOW_ALL = False
+
+# 접근 가능한 url 을 따로 관리
+CORS_ORIGIN_WHITELIST = ('http://127.0.0.1:8000', 'http://localhost:3000')
+
+CORS_ALLOW_CREDENTIALS = True

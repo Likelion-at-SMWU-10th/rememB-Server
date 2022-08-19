@@ -47,9 +47,9 @@ class user_detail(APIView):
 
         if token_user in request_user:
             obj=User.objects.get(id=pk)
-            serializers=UserSerializer(obj)
+            serializers=MyUserSerializer(obj)
             return Response(serializers.data)
-        return Response({"error":"User Perimtion Denied"},status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error":"User Perimition Denied"},status=status.HTTP_401_UNAUTHORIZED)
 
     def put(self, request, pk):
         #put: pk의 계정 정보 수정
@@ -64,7 +64,7 @@ class user_detail(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"error":" User Perimtion Denied"},status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error":"User Perimition Denied"},status=status.HTTP_401_UNAUTHORIZED)
 
     def delete(self, request, pk):
         #delete: pk의 계정 정보 삭제
@@ -75,7 +75,7 @@ class user_detail(APIView):
             obj=self.get_object(pk)
             obj.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response({"error":"User Perimition Denied"},status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error":"User Perimition Denied"},status=status.HTTP_401_UNAUTHORIZED)
 
 
 class JWTSigninView(generics.CreateAPIView):
@@ -96,14 +96,18 @@ class JWTSigninView(generics.CreateAPIView):
             user = User.objects.get_or_create( 
                 email=request.data['email'],
                 provider=request.data['provider'],
-                birth=request.data['birth'],
-                username=request.data['username']
+                #birth=request.data['birth'],
             )
         except:
+            if User.objects.get(email=request.data['email']):
+                data={
+                    'error':'email account is exist. try other social auth!'
+                }
+                return Response(data, status=status.HTTP_409_CONFLICT)
             data = {
                     'error':'request data is wrong'
                 }
-            return Response(data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(data, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         
         serializer=self.get_serializer(data=request.data)
         if serializer.is_valid():
@@ -112,6 +116,16 @@ class JWTSigninView(generics.CreateAPIView):
                 provider=request.data['provider'],
             )
             user.last_login=timezone.now()
+            user.username=request.data['username']
+            user.birth=request.data['birth']
+            try:
+                user.background=request.data['background']
+            except:
+                pass
+            try:
+                user.text=request.data['text']
+            except:
+                pass
             token = RefreshToken.for_user(user)
             user.refreshToken = str(token)
             user.save()
